@@ -13,6 +13,16 @@ const obj = {
 buttons.forEach(elm => {
     elm.addEventListener('click', function(){
         if(!isNaN(+elm.innerText)){
+            if (input.value == 'error') {
+                input.value = elm.innerText;
+                input.value = 0;
+                obj.val1 = 0;
+                obj.val2 = 0;
+                obj.symbol = '';
+                obj.res = 0;
+                obj.amboxj = null;
+                obj.amboxj2 = null;               
+            }
             if (input.value == 0) {
                 input.value = elm.innerText;
                 obj['val1'] = input.value;                
@@ -40,7 +50,7 @@ buttons.forEach(elm => {
             obj.symbol = '';
             obj.res = 0;
             obj.amboxj = null;
-            obj.amboxj2 = null
+            obj.amboxj2 = null;
         } else if (input.value == 0 && elm.innerText == 0) {
             input.value = '0'
         } else if (elm.innerText == '+/-' && input.value != 0) {
@@ -62,7 +72,7 @@ buttons.forEach(elm => {
             }
             if (obj.symbol == '' && obj.val1 != 0) {
             switch (elm.innerText) {
-                case '%':
+                case '%':                                                                                                                                                                                                                                                   
                     obj.symbol = '%';
                     break;
                 case '/':
@@ -83,19 +93,19 @@ buttons.forEach(elm => {
                 case ',':
                     if ((!obj.amboxj || !(parseFloat(obj.val1) == parseInt(obj.val1)) && obj.val2 != 0)) {
                         input.value += '.';
-                        obj.amboxj = true
+                        obj.amboxj = true;
                     }
                     if (!obj.amboxj2 && obj.val1 != 0 && obj.val2 != 0) {
+                        console.log('hop');
                         input.value += '.';
-                        obj.amboxj2 = true
+                        obj.amboxj2 = null
                     }
                     break;
                 default:
                     obj.symbol = ''
                     break;
-            }
-          } 
-        else   if (obj.symbol != '' && obj.val1 != 0 && sym != ',') {
+            }       
+         } else if (obj.symbol != '' && obj.val1 != 0 && sym != ',') {
                 switch (obj.symbol) {
                     case '%':
                         obj.res = obj.val1 % obj.val2;
@@ -105,11 +115,16 @@ buttons.forEach(elm => {
                         input.value = obj.res;
                         break;
                     case '/':
-                        obj.res = obj.val1 / obj.val2;
-                        obj.val1 = obj.res;
-                        obj.val2 = 0;
-                        obj.symbol = sym
-                        input.value = obj.res;
+                        if (obj.val2 != 0) {
+                            obj.res = obj.val1 / obj.val2;
+                            obj.val1 = obj.res;
+                            obj.val2 = 0;
+                            obj.symbol = sym
+                            input.value = obj.res;
+                        } else {
+                            input.value = 'error'
+                        }
+                        
                         break;
                     case '*':
                         obj.res = obj.val1 * obj.val2;
@@ -136,17 +151,19 @@ buttons.forEach(elm => {
                         obj.symbol = sym;
                         obj.val1 = obj.res;  
                         obj.val2 = 0;                      
-                        input.value = obj.res;              
+                        input.value = obj.res; 
+                        obj.amboxj2 = null
                         break;
                     case ',':
                         if (!obj.amboxj || !(parseFloat(obj.res) == parseInt(obj.res))) {
                             input.value += '.';
-                            obj.amboxj = true
+                            obj.amboxj = true;
                         }
-                        if (obj.amboxj2) {
+                        if (!obj.amboxj2) {
                             obj.val2 += '.';
                             input.value += '.';
-                            obj.amboxj = null
+                            obj.amboxj = null;
+                            obj.amboxj2 = null;
                         }
                         break;
                     default:
